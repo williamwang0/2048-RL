@@ -3,6 +3,8 @@ from collections import defaultdict
 from game import *
 
 
+actions = ['Up', 'Left', 'Down', 'Right']
+
 class FQLearningAgent:
 
     def __init__(self):
@@ -78,8 +80,7 @@ class FQLearningAgent:
 
         feature_vector.append(count)
 
-
-        return
+        return np.array(feature_vector)
 
     def getQValue(self, s, a):
         """ returns dot-product of feature vector with weight vector """
@@ -87,9 +88,9 @@ class FQLearningAgent:
 
     def update(self, s1, a, s2, r):
         """ updates weights based on transition """
-        
-        return
-
+        diff = r + (self.gamma * max([self.getQValue(s2, a) for a in actions])) \
+               - self.getQValue(s1, a)
+        self.weights = self.weights + (self.alpha * diff * self.getFeature(s1, a))
 
 def __main__():
     agent = FQLearningAgent()
