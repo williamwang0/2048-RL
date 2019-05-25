@@ -15,7 +15,6 @@ class FQLearningAgent:
         new_board = s.sim_move(a)[0]
         feature_vector = []
 
-
         #Merges, Open Tiles, Biggest Num in Corner
         prev_open = 0
         max_num = 0
@@ -54,7 +53,21 @@ class FQLearningAgent:
         feature_vector.extend([merges, open_tiles, big_num_in_corner])
 
         #Adjacent Pairs differ by a Factor of 2
+        count = 0
 
+        for x in new_board:
+            for y_index in range(len(x) - 1):
+                y_ratio =  x[y_index] / x[y_index + 1]
+                if y_ratio == 0.5 or y_ratio == 2:
+                    count = count + 1
+
+        for y in new_board:
+            for x_index in range(len(y) - 1):
+                x_ratio =  y[x_index] / y[x_index + 1]
+                if x_ratio == 0.5 or x_ratio == 2:
+                    count = count + 1
+
+        feature_vector.append(count)
 
 
         return
