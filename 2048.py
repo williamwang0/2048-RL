@@ -1,6 +1,7 @@
 import curses
 from random import randrange, choice  # generate and place new tile
 from collections import defaultdict
+from copy import copy, deepcopy
 
 letter_codes = [ord(ch) for ch in 'WASDRQwasdrq']
 actions = ['Up', 'Left', 'Down', 'Right', 'Restart', 'Exit']
@@ -39,7 +40,25 @@ class GameField(object):
         self.spawn()
         self.spawn()
 
-    def move(self, direction):
+
+    """ Returns tuple of board state after simulating move in 'Direction' 
+    and the increase in score at indices 0 and 1 respectively"""
+    def sim_move(self, direction):
+        prev_score = self.score
+
+        temp_board = deepcopy(self.field)
+
+        self.move(direction, False)
+
+        temp_board, self.field  = self.field, temp_board
+        diff, self.score = self.score - prev_score, prev_score
+
+
+        return temp_board, diff
+
+
+
+    def move(self, direction, spawn = True):
         def move_row_left(row):
             def tighten(row):  # squeese non-zero elements together
                 new_row = [i for i in row if i != 0]
@@ -78,7 +97,8 @@ class GameField(object):
         if direction in moves:
             if self.move_is_possible(direction):
                 self.field = moves[direction](self.field)
-                self.spawn()
+                if spawn:
+                    self.spawn()
                 return True
             else:
                 return False
@@ -188,6 +208,7 @@ def main(stdscr):
     def game():
         game_field.draw(stdscr)
         action = get_user_action(stdscr)
+
         if action == 'Restart':
             return 'Init'
         if action == 'Exit':
