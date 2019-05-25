@@ -67,6 +67,20 @@ class FQLearningAgent:
         while state != 'Exit':
             state = state_actions[state]()
 
+    def numAdj(self, board, ratios):
+        """ takes in a board and a list of ratios.
+            returns number of adjacent pairs with that ratio """
+        counter = 0
+        for x_val in board:
+            for y_index in range(len(x_val) - 1):
+                try:
+                    y_ratio = x_val[y_index] / x_val[y_index + 1]
+                    if y_ratio in ratios or (1 / y_ratio) in ratios:
+                        counter += 1
+                except ZeroDivisionError:
+                    pass
+        return counter
+
     def getFeature(self, s, a):
         """ returns feature value calculation of a q-state
         1. Merges
@@ -84,6 +98,8 @@ class FQLearningAgent:
         big_num_in_corner = 0
 
         open_tiles = 0
+
+        open_tiles = -1
 
         for y in prev_board:
             for x in y:
@@ -115,24 +131,8 @@ class FQLearningAgent:
 
         # Adjacent Pairs differ by a Factor of 2
         count = 0
-
-        for x in new_board:
-            for y_index in range(len(x) - 1):
-                try:
-                    y_ratio = x[y_index] / x[y_index + 1]
-                    if y_ratio == 0.5 or y_ratio == 2:
-                        count = count + 1
-                except ZeroDivisionError:
-                    pass
-
-        for y in new_board:
-            for x_index in range(len(y) - 1):
-                try:
-                    x_ratio = y[x_index] / y[x_index + 1]
-                    if x_ratio == 0.5 or x_ratio == 2:
-                        count = count + 1
-                except ZeroDivisionError:
-                    pass
+        count += self.numAdj(new_board, [2])
+        count += self.numAdj(transpose(new_board), [2])
 
         feature_vector.append(count)
 

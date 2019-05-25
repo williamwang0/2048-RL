@@ -43,12 +43,12 @@ class GameField(object):
 
     """ Returns tuple of board state after simulating move in 'Direction' 
     and the increase in score at indices 0 and 1 respectively"""
-    def sim_move(self, direction):
+    def sim_move(self, direction, spawn = False):
         prev_score = self.score
 
         temp_board = deepcopy(self.field)
 
-        self.move(direction, False)
+        self.move(direction, spawn)
 
         temp_board, self.field  = self.field, temp_board
         diff, self.score = self.score - prev_score, prev_score
