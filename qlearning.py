@@ -8,14 +8,15 @@ actions = ['Up', 'Left', 'Down', 'Right']
 class FQLearningAgent:
 
     def __init__(self):
-        self.weights = np.array([0, 0, 0, 0])
-        self.gamma = 0.99
-        self.alpha = 0.1
+        self.weights = np.array([0, 0, 0, 0, 0])
+        self.gamma = 0.8
+        self.alpha = 0.01
         self.epsilon = 1.0
 
     def learn(self):
         """ trains agent on 1 game instance """
-        game_field = GameField(win=(2 ** 15))
+        self.game_field = GameField(win=(2 ** 15))
+        game_field = self.game_field
         state_actions = {}  # Init, Game, Win, Gameover, Exit
 
         def init():
@@ -36,20 +37,14 @@ class FQLearningAgent:
         state_actions['Gameover'] = lambda: not_game('Gameover')
 
         def game():
-            # game_field.draw(stdscr)
-            # action = get_user_action(stdscr)
-            # if action == 'Restart':
-            #     return 'Init'
-            # if action == 'Exit':
-            #     return 'Exit'
-
-            best_action = max(actions, key=(lambda action: self.getQValue(game_field, action)))
+            best_action = max([action for action in actions if game_field.move_is_possible(action)]
+                              , key=(lambda action: self.getQValue(game_field, action)))
             # add epsilon exploration later here #
             # new_field, reward = game_field.sim_move(best_action, True)
+
             prev_score = game_field.score
             prev_game_field = deepcopy(game_field)
 
-            print(best_action)
             if game_field.move(best_action):
                 if game_field.is_win():
                     return 'Win'
@@ -57,7 +52,6 @@ class FQLearningAgent:
                     return 'Gameover'
                 reward = game_field.score - prev_score
                 self.update(prev_game_field, best_action, game_field, reward)
-                print(self.weights)
 
             return 'Game'
 
@@ -97,7 +91,7 @@ class FQLearningAgent:
         max_num = 0
 
         big_num_in_corner = 0
-        
+
         open_tiles = -1
 
         for y in prev_board:
@@ -155,8 +149,8 @@ class FQLearningAgent:
 
 def __main__():
     agent = FQLearningAgent()
-    for _ in range(10):
-        # print(agent.weights)
+    for _ in range(20):
+        print(agent.weights)
         agent.learn()
 
     print(agent.weights)
