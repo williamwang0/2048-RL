@@ -46,7 +46,7 @@ class FQLearningAgent:
 
         big_num_in_corner = 0
     
-        open_tiles = 0
+        open_tiles = -1
 
         for y in prev_board:
             for x in y:
