@@ -88,8 +88,8 @@ class FQLearningAgent:
 
     def update(self, s1, a, s2, r):
         """ updates weights based on transition """
-        diff = r + (self.gamma * max([self.getQValue(s2, a) for a in actions])) \
-               - self.getQValue(s1, a)
+        diff = r + (self.gamma * max([self.getQValue(s2, act) for act in actions])) \
+            - self.getQValue(s1, a)
         self.weights = self.weights + (self.alpha * diff * self.getFeature(s1, a))
 
 def __main__():
