@@ -74,19 +74,35 @@ class FQLearningAgent:
         while state != 'Exit':
             state = state_actions[state]()
 
-    def numAdj(self, board, ratios):
-        """ takes in a board and a list of ratios.
-            returns number of adjacent pairs with that ratio """
+    def numAdj(self, board, ratio):
+        """ takes in a board and a ratio.
+            returns number of horizontally adjacent pairs with that ratio """
         counter = 0
         for x_val in board:
-            for y_index in range(len(x_val) - 1):
-                try:
-                    y_ratio = x_val[y_index] / x_val[y_index + 1]
-                    if y_ratio in ratios or (1 / y_ratio) in ratios:
+            try:
+                for rat in self.rowRatios(board, x_val):
+                    if rat == ratio or (1 / rat) == ratio:
                         counter += 1
-                except ZeroDivisionError:
-                    pass
+            except ZeroDivisionError:
+                pass
         return counter
+
+    def rowIncr(self, ratios):
+        if ratios[0] < 1:
+            for rat in ratios:
+                if rat >= 1:
+                    return False
+            return True
+        else:
+            for rat in ratios:
+                if rat < 1:
+                    return False
+            return True
+
+    def rowRatios(self, board, rowNum):
+        row = board[rowNum]
+        return [row[i] / row[i + 1] for i in range(len(row) - 1)]
+
 
     def getFeature(self, s, a):
         """ returns feature value calculation of a q-state
@@ -94,7 +110,9 @@ class FQLearningAgent:
         2. Open Tiles
         3. Biggest Num in Corner (0 or 1)
         4. Adjacent Pairs that differ by a factor of 2
-        5. Adjacent Pairs that are equal """
+        5. Adjacent Pairs that are equal
+        6. Max Tile
+        7. Monotonically increasing along a field edge """
         prev_board = s.field
         new_board = s.sim_move(a)[0]
         feature_vector = []
@@ -137,15 +155,22 @@ class FQLearningAgent:
 
         #Adjacent Pairs differ by a Factor of 2
         double_count = 0
-        double_count += self.numAdj(new_board, [2])
-        double_count += self.numAdj(transpose(new_board), [2])
+        double_count += self.numAdj(new_board, 2)
+        double_count += self.numAdj(transpose(new_board), 2)
         feature_vector.append(double_count)
 
         #Adjacent Pairs that are equal
         equal_count = 0
-        equal_count += self.numAdj(new_board, [1])
-        equal_count += self.numAdj(transpose(new_board), [1])
+        equal_count += self.numAdj(new_board, 1)
+        equal_count += self.numAdj(transpose(new_board), 1)
         feature_vector.append(equal_count)
+
+        #Monotonically Increasing along an edge
+        row0Incr = self.rowIncr(self.rowRatios(new_board, 0))
+        row3Incr = self.rowIncr(self.rowRatios(new_board, 3))
+        col0Incr = self.rowIncr(self.rowRatios(transpose(new_board), 0))
+        col3Incr = self.rowIncr(self.rowRatios(transpose(new_board), 3))
+        feature_vector.append(any([row0Incr, row3Incr, col0Incr, col3Incr]))
 
         # EXPLORATION FUNCTION SUPPORT
         fv = feature_vector
@@ -180,6 +205,5 @@ def __main__():
 
 
     # print(agent.weights)
-
 
 __main__()
