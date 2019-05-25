@@ -61,7 +61,7 @@ class FQLearningAgent:
                 if x > max_num:
                     max_num = x
 
-        merges = open_tiles - prev_open
+        merges = open_tiles - prev_open + 1
 
         if new_board[0][0] == max_num:
             big_num_in_corner = 1
