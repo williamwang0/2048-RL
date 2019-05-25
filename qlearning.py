@@ -88,6 +88,8 @@ class FQLearningAgent:
         return counter
 
     def rowIncr(self, ratios):
+        if not ratios:
+            return False
         if ratios[0] < 1:
             for rat in ratios:
                 if rat >= 1:
