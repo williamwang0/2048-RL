@@ -78,7 +78,7 @@ class FQLearningAgent:
         """ takes in a board and a ratio.
             returns number of horizontally adjacent pairs with that ratio """
         counter = 0
-        for x_val in board:
+        for x_val in range(len(board)):
             try:
                 for rat in self.rowRatios(board, x_val):
                     if rat == ratio or (1 / rat) == ratio:
@@ -166,6 +166,7 @@ class FQLearningAgent:
 
         #Max Tile
         feature_vector.append(np.log2(max_num))
+
         #Monotonically Increasing along an edge
         row0Incr = self.rowIncr(self.rowRatios(new_board, 0))
         row3Incr = self.rowIncr(self.rowRatios(new_board, 3))
