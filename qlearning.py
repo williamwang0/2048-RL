@@ -86,7 +86,8 @@ class FQLearningAgent:
         1. Merges
         2. Open Tiles
         3. Biggest Num in Corner (0 or 1)
-        4. Adjacent Pairs that differ by a factor of 2 """
+        4. Adjacent Pairs that differ by a factor of 2
+        5. Adjacent Pairs that are equal """
         prev_board = s.field
         new_board = s.sim_move(a)[0]
         feature_vector = []
@@ -96,9 +97,7 @@ class FQLearningAgent:
         max_num = 0
 
         big_num_in_corner = 0
-
-        open_tiles = 0
-
+        
         open_tiles = -1
 
         for y in prev_board:
@@ -129,12 +128,17 @@ class FQLearningAgent:
 
         feature_vector.extend([merges, open_tiles, big_num_in_corner])
 
-        # Adjacent Pairs differ by a Factor of 2
-        count = 0
-        count += self.numAdj(new_board, [2])
-        count += self.numAdj(transpose(new_board), [2])
+        #Adjacent Pairs differ by a Factor of 2
+        double_count = 0
+        double_count += self.numAdj(new_board, [2])
+        double_count += self.numAdj(transpose(new_board), [2])
+        feature_vector.append(double_count)
 
-        feature_vector.append(count)
+        #Adjacent Pairs that are equal
+        equal_count = 0
+        equal_count += self.numAdj(new_board, [1])
+        equal_count += self.numAdj(transpose(new_board), [1])
+        feature_vector.append(equal_count)
 
         return np.array(feature_vector)
 

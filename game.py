@@ -50,13 +50,10 @@ class GameField(object):
 
         self.move(direction, spawn)
 
-        temp_board, self.field  = self.field, temp_board
+        temp_board, self.field = self.field, temp_board
         diff, self.score = self.score - prev_score, prev_score
 
-
         return temp_board, diff
-
-
 
     def move(self, direction, spawn = True):
         def move_row_left(row):
