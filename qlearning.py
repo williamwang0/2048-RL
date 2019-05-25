@@ -31,7 +31,7 @@ class FQLearningAgent:
         max_num = 0
 
         big_num_in_corner = 0
-        merges = 0
+    
         open_tiles = 0
 
         for y in prev_board:
