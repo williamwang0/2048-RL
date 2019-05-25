@@ -22,6 +22,9 @@ class FQLearningAgent:
     def reward(self, s1, a, s2):
         """ returns """
 
+        "colton is a strong independent woman"
+        a = 1 + 2
+
 class State:
 
     def __init__(self, f=None, s=0):
