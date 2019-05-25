@@ -8,10 +8,12 @@ actions = ['Up', 'Left', 'Down', 'Right']
 class FQLearningAgent:
 
     def __init__(self):
-        self.weights = np.array([0, 0, 0, 0, 0])
+        self.weights = np.array([22, 0, 0, 0, 0])
         self.gamma = 0.8
-        self.alpha = 0.01
-        self.epsilon = 1.0
+        self.alpha = 0.005
+        self.explore = 20
+        self.game_field = GameField(win=(2 ** 15))
+        self.counts = [{} for _ in range(5)]
 
     def learn(self):
         """ trains agent on 1 game instance """
@@ -37,9 +39,16 @@ class FQLearningAgent:
         state_actions['Gameover'] = lambda: not_game('Gameover')
 
         def game():
+            def exFunc(action):
+                fv = self.getFeature(game_field, action)
+                count = 1
+                for i in range(5):
+                    if fv[i] in self.counts[i]:
+                        count += 1
+                return self.getQValue(game_field, action) + self.explore / count
 
             best_action = max([action for action in actions if game_field.move_is_possible(action)]
-                              , key=(lambda action: self.getQValue(game_field, action)))
+                              , key=exFunc)
             # add epsilon exploration later here #
             # new_field, reward = game_field.sim_move(best_action, True)
 
@@ -135,6 +144,14 @@ class FQLearningAgent:
         equal_count += self.numAdj(transpose(new_board), [1])
         feature_vector.append(equal_count)
 
+        # EXPLORATION FUNCTION SUPPORT
+        fv = feature_vector
+        for i in range(5):
+            if fv[i] not in self.counts[i]:
+                self.counts[i][fv[i]] = 1
+            else:
+                self.counts[i][fv[i]] += 1
+
         return np.array(feature_vector)
 
     def getQValue(self, s, a):
@@ -151,56 +168,10 @@ class FQLearningAgent:
 def __main__():
     agent = FQLearningAgent()
     for _ in range(100):
-        print(agent.weights)
         agent.learn()
-        print(agent.game_field.maxTile())
+        print(agent.game_field.maxTile(), agent.weights)
 
     print(agent.weights)
 
 
 __main__()
-
-#
-#
-# game_field = GameField(win=(2**15))
-# state_actions = {}  # Init, Game, Win, Gameover, Exit
-#
-# def init():
-#     game_field.reset()
-#     return 'Game'
-#
-# state_actions['Init'] = init
-#
-# def not_game(state):
-#     # game_field.draw(stdscr)
-#     # action = get_user_action(stdscr)
-#     responses = defaultdict(lambda: state)
-#     responses['Restart'], responses['Exit'] = 'Init', 'Exit'
-#     return responses['Exit']  # or action
-#
-# state_actions['Win'] = lambda: not_game('Win')
-# state_actions['Gameover'] = lambda: not_game('Gameover')
-#
-# def game():
-#     # game_field.draw(stdscr)
-#     # action = get_user_action(stdscr)
-#     action = 'Restart'
-#     if action == 'Restart':
-#         return 'Init'
-#     if action == 'Exit':
-#         return 'Exit'
-#     if game_field.move(action):  # move successful
-#         if game_field.is_win():
-#             return 'Win'
-#         if game_field.is_gameover():
-#             return 'Gameover'
-#     return 'Game'
-#
-# state_actions['Game'] = game
-#
-# state = 'Init'
-# while state != 'Exit':
-#     state = state_actions[state]()
-#
-#
-#
