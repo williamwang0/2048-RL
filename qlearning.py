@@ -5,13 +5,15 @@ from game import *
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
 
+
 class FQLearningAgent:
 
     def __init__(self):
         self.weights = np.array([0 for x in range(num_feats)])
-        self.gamma = 0.8
+
+        self.gamma = 0.9
         self.alpha = 0.005
-        self.explore = 5
+        self.explore = 0
         self.game_field = GameField(win=(2 ** 15))
         self.counts = [{} for _ in range(num_feats)]
 
@@ -232,13 +234,14 @@ class FQLearningAgent:
 
 def __main__():
     agent = FQLearningAgent()
-    mean_max_tile = 0
-    while True:
-        agent.learn()
-        mT = agent.game_field.maxTile()
-        print(mT, agent.weights)
-        mean_max_tile += mT
-    print(mean_max_tile / 100)
+    for i in range(100):
+        mean_max_tile = 0
+        for _ in range(20):
+            agent.learn()
+            mT = agent.game_field.maxTile()
+            print(mT, agent.weights)
+            mean_max_tile += mT
+        print(mean_max_tile / 20)
 
 
     # print(agent.weights)
