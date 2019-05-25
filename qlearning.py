@@ -1,6 +1,6 @@
 import numpy as np
 
-
+s = "hello"
 class FQLearningAgent:
 
     def __init__(self):
