@@ -1,9 +1,18 @@
 import numpy as np
+from collections import defaultdict
+from game import *
+
 
 class FQLearningAgent:
 
     def __init__(self):
         self.weights = np.array([0, 0, 0, 0])
+        self.gamma = 0.99
+        self.alpha = 0.5
+        self.epsilon = 1.0
+
+    def learn(self):
+        """ trains agent on 1 game instance """
 
     def getFeature(self, s, a):
         """ returns feature value calculation of a q-state
@@ -94,9 +103,16 @@ class State:
     def setScore(self, s):
         self.score = s
 
-def main(stdscr):
-    curses.use_default_colors()
-    game_field = GameField(win=2048)
+
+def __main__():
+    agent = FQLearningAgent()
+    for _ in range(10):
+        agent.learn()
+
+
+    
+
+    game_field = GameField(win=(2**15))
     state_actions = {}  # Init, Game, Win, Gameover, Exit
 
     def init():
@@ -106,18 +122,19 @@ def main(stdscr):
     state_actions['Init'] = init
 
     def not_game(state):
-        game_field.draw(stdscr)
-        action = get_user_action(stdscr)
+        # game_field.draw(stdscr)
+        # action = get_user_action(stdscr)
         responses = defaultdict(lambda: state)
         responses['Restart'], responses['Exit'] = 'Init', 'Exit'
-        return responses[action]
+        return responses['Exit']  # or action
 
     state_actions['Win'] = lambda: not_game('Win')
     state_actions['Gameover'] = lambda: not_game('Gameover')
 
     def game():
-        game_field.draw(stdscr)
-        action = get_user_action(stdscr)
+        # game_field.draw(stdscr)
+        # action = get_user_action(stdscr)
+        action = 'Restart'
         if action == 'Restart':
             return 'Init'
         if action == 'Exit':
@@ -134,3 +151,4 @@ def main(stdscr):
     state = 'Init'
     while state != 'Exit':
         state = state_actions[state]()
+
