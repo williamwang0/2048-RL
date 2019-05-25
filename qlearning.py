@@ -3,17 +3,17 @@ from collections import defaultdict
 from game import *
 
 actions = ['Up', 'Left', 'Down', 'Right']
-
+num_feats = 6
 
 class FQLearningAgent:
 
     def __init__(self):
-        self.weights = np.array([0, 0, 0, 0, 0])
+        self.weights = np.array([0 for x in range(num_feats)])
         self.gamma = 0.6
         self.alpha = 0.005
         self.explore = 20
         self.game_field = GameField(win=(2 ** 15))
-        self.counts = [{} for _ in range(5)]
+        self.counts = [{} for _ in range(num_feats)]
 
     def learn(self):
         """ trains agent on 1 game instance """
@@ -42,7 +42,7 @@ class FQLearningAgent:
             def exFunc(action):
                 fv = self.getFeature(game_field, action)
                 count = 1
-                for i in range(5):
+                for i in range(num_feats):
                     if fv[i] in self.counts[i]:
                         count += 1
                 return self.getQValue(game_field, action) + self.explore / count
@@ -107,12 +107,11 @@ class FQLearningAgent:
     def getFeature(self, s, a):
         """ returns feature value calculation of a q-state
         1. Merges
-        2. Open Tiles
-        3. Biggest Num in Corner (0 or 1)
-        4. Adjacent Pairs that differ by a factor of 2
-        5. Adjacent Pairs that are equal
-        6. Max Tile
-        7. Monotonically increasing along a field edge """
+        2. Biggest Num in Corner (0 or 1)
+        3. Adjacent Pairs that differ by a factor of 2
+        4. Adjacent Pairs that are equal
+        5. Max Tile
+        6. Monotonically increasing along a field edge """
         prev_board = s.field
         new_board = s.sim_move(a)[0]
         feature_vector = []
@@ -151,7 +150,7 @@ class FQLearningAgent:
         if new_board[len(new_board) - 1][len(new_board) - 1] == max_num:
             big_num_in_corner = 1
 
-        feature_vector.extend([merges, open_tiles, big_num_in_corner])
+        feature_vector.extend([merges, big_num_in_corner])
 
         #Adjacent Pairs differ by a Factor of 2
         double_count = 0
@@ -165,6 +164,8 @@ class FQLearningAgent:
         equal_count += self.numAdj(transpose(new_board), 1)
         feature_vector.append(equal_count)
 
+        #Max Tile
+        feature_vector.append(np.log2(max_num))
         #Monotonically Increasing along an edge
         row0Incr = self.rowIncr(self.rowRatios(new_board, 0))
         row3Incr = self.rowIncr(self.rowRatios(new_board, 3))
@@ -174,7 +175,7 @@ class FQLearningAgent:
 
         # EXPLORATION FUNCTION SUPPORT
         fv = feature_vector
-        for i in range(5):
+        for i in range(num_feats):
             if fv[i] not in self.counts[i]:
                 self.counts[i][fv[i]] = 1
             else:
