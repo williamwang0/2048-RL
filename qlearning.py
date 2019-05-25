@@ -8,8 +8,8 @@ actions = ['Up', 'Left', 'Down', 'Right']
 class FQLearningAgent:
 
     def __init__(self):
-        self.weights = np.array([22, 0, 0, 0, 0])
-        self.gamma = 0.8
+        self.weights = np.array([0, 0, 0, 0, 0])
+        self.gamma = 0.6
         self.alpha = 0.005
         self.explore = 20
         self.game_field = GameField(win=(2 ** 15))
@@ -47,6 +47,9 @@ class FQLearningAgent:
                         count += 1
                 return self.getQValue(game_field, action) + self.explore / count
 
+            def regFunc(action):
+                return self.getQValue(game_field, action)
+
             best_action = max([action for action in actions if game_field.move_is_possible(action)]
                               , key=exFunc)
             # add epsilon exploration later here #
@@ -60,7 +63,7 @@ class FQLearningAgent:
                     return 'Win'
                 if game_field.is_gameover():
                     return 'Gameover'
-                reward = game_field.score - prev_score
+                reward = (game_field.score - prev_score)
                 self.update(prev_game_field, best_action, game_field, reward)
 
             return 'Game'
@@ -167,11 +170,16 @@ class FQLearningAgent:
 
 def __main__():
     agent = FQLearningAgent()
-    for _ in range(1000):
+    mean_max_tile = 0
+    for _ in range(100):
         agent.learn()
-        print(agent.game_field.maxTile(), agent.weights)
+        mT = agent.game_field.maxTile()
+        print(mT, agent.weights)
+        mean_max_tile += mT
+    print(mean_max_tile / 100)
 
-    print(agent.weights)
+
+    # print(agent.weights)
 
 
 __main__()
