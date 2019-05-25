@@ -183,48 +183,49 @@ class GameField(object):
         else:
             return False
 
-#
-# def main(stdscr):
-#     curses.use_default_colors()
-#     game_field = GameField(win=2048)
-#     state_actions = {}  # Init, Game, Win, Gameover, Exit
-#
-#     def init():
-#         game_field.reset()
-#         return 'Game'
-#
-#     state_actions['Init'] = init
-#
-#     def not_game(state):
-#         game_field.draw(stdscr)
-#         action = get_user_action(stdscr)
-#         responses = defaultdict(lambda: state)
-#         responses['Restart'], responses['Exit'] = 'Init', 'Exit'
-#         return responses[action]
-#
-#     state_actions['Win'] = lambda: not_game('Win')
-#     state_actions['Gameover'] = lambda: not_game('Gameover')
-#
-#     def game():
-#         game_field.draw(stdscr)
-#         action = get_user_action(stdscr)
-#
-#         if action == 'Restart':
-#             return 'Init'
-#         if action == 'Exit':
-#             return 'Exit'
-#         if game_field.move(action):  # move successful
-#             if game_field.is_win():
-#                 return 'Win'
-#             if game_field.is_gameover():
-#                 return 'Gameover'
-#         return 'Game'
-#
-#     state_actions['Game'] = game
-#
-#     state = 'Init'
-#     while state != 'Exit':
-#         state = state_actions[state]()
-#
-#
-# curses.wrapper(main)
+
+"""def main(stdscr):
+    curses.use_default_colors()
+    game_field = GameField(win=2048)
+    state_actions = {}  # Init, Game, Win, Gameover, Exit
+
+    def init():
+        game_field.reset()
+        return 'Game'
+
+    state_actions['Init'] = init
+
+    def not_game(state):
+        game_field.draw(stdscr)
+        action = get_user_action(stdscr)
+        responses = defaultdict(lambda: state)
+        responses['Restart'], responses['Exit'] = 'Init', 'Exit'
+        return responses[action]
+
+    state_actions['Win'] = lambda: not_game('Win')
+    state_actions['Gameover'] = lambda: not_game('Gameover')
+
+    def game():
+        game_field.draw(stdscr)
+        action = get_user_action(stdscr)
+
+        if action == 'Restart':
+            return 'Init'
+        if action == 'Exit':
+            return 'Exit'
+        if game_field.move(action):  # move successful
+            if game_field.is_win():
+                return 'Win'
+            if game_field.is_gameover():
+                return 'Gameover'
+        return 'Game'
+
+    state_actions['Game'] = game
+
+    state = 'Init'
+    while state != 'Exit':
+        state = state_actions[state]()
+
+
+curses.wrapper(main)"""
+
