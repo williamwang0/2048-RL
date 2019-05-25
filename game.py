@@ -2,7 +2,6 @@ import curses
 from random import randrange, choice  # generate and place new tile
 from collections import defaultdict
 from copy import copy, deepcopy
-from math import log
 
 letter_codes = [ord(ch) for ch in 'WASDRQwasdrq']
 actions = ['Up', 'Left', 'Down', 'Right', 'Restart', 'Exit']
