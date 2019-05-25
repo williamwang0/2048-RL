@@ -9,15 +9,49 @@ class FQLearningAgent:
         """ returns feature value calculation of a q-state
         1. Merges
         2. Open Tiles
-        3. Adjacent Pairs that differ by a factor of 2
-        4. Biggest num in corner (0 or 1) """
+        3. Biggest Num in Corner (0 or 1)
+        4. Adjacent Pairs that differ by a factor of 2 """
         prev_board = s.field
-        new_board = s.sim_move(s)[0]
-        max_num = 0
+        new_board = s.sim_move(a)[0]
+        feature_vector = []
+
 
         #Merges, Open Tiles, Biggest Num in Corner
+        prev_open = 0
+        max_num = 0
+
+        big_num_in_corner = 0
+        merges = 0
+        open_tiles = 0
+
+        for y in prev_board:
+            for x in y:
+                if x == 0:
+                    prev_open += 1
 
 
+        for y in new_board:
+            for x in y:
+                if x == 0:
+                    open_tiles += 1
+                if x > max_num:
+                    max_num = x
+
+        merges = open_tiles - prev_open
+
+        if new_board[0][0] == max_num:
+            big_num_in_corner = 1
+
+        if new_board[len(new_board) - 1][0] == max_num:
+            big_num_in_corner = 1
+
+        if new_board[0][len(new_board) - 1] == max_num:
+            big_num_in_corner = 1
+
+        if new_board[len(new_board) - 1][len(new_board) - 1] == max_num:
+            big_num_in_corner = 1
+
+        feature_vector.extend([merges, open_tiles, big_num_in_corner])
 
         #Adjacent Pairs differ by a Factor of 2
 
