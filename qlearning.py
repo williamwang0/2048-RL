@@ -11,7 +11,7 @@ class FQLearningAgent:
         self.weights = np.array([0 for x in range(num_feats)])
         self.gamma = 0.8
         self.alpha = 0.005
-        self.explore = 20
+        self.explore = 5
         self.game_field = GameField(win=(2 ** 15))
         self.counts = [{} for _ in range(num_feats)]
 
