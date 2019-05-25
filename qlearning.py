@@ -149,9 +149,10 @@ class FQLearningAgent:
 
 def __main__():
     agent = FQLearningAgent()
-    for _ in range(20):
+    for _ in range(100):
         print(agent.weights)
         agent.learn()
+        print(agent.game_field.maxTile())
 
     print(agent.weights)
 
