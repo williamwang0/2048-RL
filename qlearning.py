@@ -79,12 +79,12 @@ class FQLearningAgent:
             returns number of horizontally adjacent pairs with that ratio """
         counter = 0
         for x_val in range(len(board)):
-            try:
-                for rat in self.rowRatios(board, x_val):
+            for rat in self.rowRatios(board, x_val):
+                try:
                     if rat == ratio or (1 / rat) == ratio:
                         counter += 1
-            except ZeroDivisionError:
-                pass
+                except ZeroDivisionError:
+                    pass
         return counter
 
     def rowIncr(self, ratios):
@@ -101,8 +101,13 @@ class FQLearningAgent:
 
     def rowRatios(self, board, rowNum):
         row = board[rowNum]
-        return [row[i] / row[i + 1] for i in range(len(row) - 1)]
-
+        result = []
+        for i in range(len(row) - 1):
+            try:
+                result.append(row[i] / row[i + 1])
+            except ZeroDivisionError:
+                pass
+        return result
 
     def getFeature(self, s, a):
         """ returns feature value calculation of a q-state
