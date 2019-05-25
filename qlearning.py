@@ -68,15 +68,21 @@ class FQLearningAgent:
 
         for x in new_board:
             for y_index in range(len(x) - 1):
-                y_ratio =  x[y_index] / x[y_index + 1]
-                if y_ratio == 0.5 or y_ratio == 2:
-                    count = count + 1
+                try:
+                    y_ratio = x[y_index] / x[y_index + 1]
+                    if y_ratio == 0.5 or y_ratio == 2:
+                        count = count + 1
+                except ZeroDivisionError:
+                    pass
 
         for y in new_board:
             for x_index in range(len(y) - 1):
-                x_ratio =  y[x_index] / y[x_index + 1]
-                if x_ratio == 0.5 or x_ratio == 2:
-                    count = count + 1
+                try:
+                    x_ratio = y[x_index] / y[x_index + 1]
+                    if x_ratio == 0.5 or x_ratio == 2:
+                        count = count + 1
+                except ZeroDivisionError:
+                    pass
 
         feature_vector.append(count)
 
