@@ -68,15 +68,21 @@ class FQLearningAgent:
 
         for x in new_board:
             for y_index in range(len(x) - 1):
-                y_ratio =  x[y_index] / x[y_index + 1]
-                if y_ratio == 0.5 or y_ratio == 2:
-                    count = count + 1
+                try:
+                    y_ratio = x[y_index] / x[y_index + 1]
+                    if y_ratio == 0.5 or y_ratio == 2:
+                        count = count + 1
+                except ZeroDivisionError:
+                    pass
 
         for y in new_board:
             for x_index in range(len(y) - 1):
-                x_ratio =  y[x_index] / y[x_index + 1]
-                if x_ratio == 0.5 or x_ratio == 2:
-                    count = count + 1
+                try:
+                    x_ratio = y[x_index] / y[x_index + 1]
+                    if x_ratio == 0.5 or x_ratio == 2:
+                        count = count + 1
+                except ZeroDivisionError:
+                    pass
 
         feature_vector.append(count)
 
@@ -88,8 +94,8 @@ class FQLearningAgent:
 
     def update(self, s1, a, s2, r):
         """ updates weights based on transition """
-        diff = r + (self.gamma * max([self.getQValue(s2, a) for a in actions])) \
-               - self.getQValue(s1, a)
+        diff = r + (self.gamma * max([self.getQValue(s2, act) for act in actions])) \
+            - self.getQValue(s1, a)
         self.weights = self.weights + (self.alpha * diff * self.getFeature(s1, a))
 
 def __main__():
