@@ -1,14 +1,12 @@
 import numpy as np
 
-s = "hello"
-s2 = "bye"
 class FQLearningAgent:
 
     def __init__(self):
         self.weights = np.array([0, 0, 0, 0])
 
     def getFeature(self, s, a):
-        """ returns feature value calculation of a q-state"""
+        """ returns feature value calculation of a q-state """
         return
 
     def getQValue(self, s, a):
@@ -17,14 +15,9 @@ class FQLearningAgent:
 
     def update(self, s1, a, s2, r):
         """ updates weights based on transition """
-
+        
         return
 
-    def reward(self, s1, a, s2):
-        """ returns """
-
-        "colton is a strong independent woman"
-        a = 1 + 2
 
 class State:
 
