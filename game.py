@@ -100,6 +100,15 @@ class GameField(object):
             else:
                 return False
 
+    def maxTile(self):
+        max = 0
+        for x in self.field:
+            for y in x:
+                if y > max:
+                    max = y
+
+        return max
+
     def is_win(self):
         return any(any(i >= self.win_value for i in row) for row in self.field)
 
