@@ -3,13 +3,13 @@ from collections import defaultdict
 from game import *
 
 actions = ['Up', 'Left', 'Down', 'Right']
-num_feats = 6
+num_feats = 8
 
 class FQLearningAgent:
 
     def __init__(self):
         self.weights = np.array([0 for x in range(num_feats)])
-        self.gamma = 0.6
+        self.gamma = 0.8
         self.alpha = 0.005
         self.explore = 20
         self.game_field = GameField(win=(2 ** 15))
@@ -118,7 +118,9 @@ class FQLearningAgent:
         3. Adjacent Pairs that differ by a factor of 2
         4. Adjacent Pairs that are equal
         5. Max Tile
-        6. Monotonically increasing along a field edge """
+        6. Monotonically increasing along a field edge
+        7. Log(sum) of tiles
+        8. Max near corner"""
         prev_board = s.field
         new_board = s.sim_move(a)[0]
         feature_vector = []
@@ -181,6 +183,32 @@ class FQLearningAgent:
         col3Incr = self.rowIncr(self.rowRatios(transpose(new_board), 3))
         feature_vector.append(any([row0Incr, row3Incr, col0Incr, col3Incr]))
 
+        #Sum Tiles
+        feature_vector.append(np.log(sum([sum(x) for x in new_board])))
+
+
+        #Biggest Number in one of 8 corners?
+        def max_near_corner(board, max_num):
+            if board[0][1] == max_num:
+                return 1
+            if board[1][0] == max_num:
+                return 1
+            if board[0][len(board) - 2] == max_num:
+                return 1
+            if board[len(board)-1][1] == max_num:
+                return 1
+            if board[len(board) - 2][0] == max_num:
+                return 1
+            if board[len(board) - 1][1] == max_num:
+                return 1
+            if board[len(board) - 1][len(board) - 2] == max_num:
+                return 1
+            if board[len(board) - 2][len(board) - 1] == max_num:
+                return 1
+            return 0
+
+        feature_vector.append(max_near_corner(new_board, max_num))
+
         # EXPLORATION FUNCTION SUPPORT
         fv = feature_vector
         for i in range(num_feats):
@@ -205,7 +233,7 @@ class FQLearningAgent:
 def __main__():
     agent = FQLearningAgent()
     mean_max_tile = 0
-    for _ in range(100):
+    while True:
         agent.learn()
         mT = agent.game_field.maxTile()
         print(mT, agent.weights)

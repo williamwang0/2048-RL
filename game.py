@@ -110,6 +110,14 @@ class GameField(object):
 
         return max
 
+    def sumTiles(self):
+        sum = 0
+        for x in self.field:
+            for y in x:
+                sum += y
+
+        return sum
+
     def is_win(self):
         return any(any(i >= self.win_value for i in row) for row in self.field)
 
