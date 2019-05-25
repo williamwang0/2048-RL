@@ -91,19 +91,6 @@ class FQLearningAgent:
         return
 
 
-class State:
-
-    def __init__(self, f=None, s=0):
-        self.field = f
-        self.score = s
-
-    def setField(self, f):
-        self.field = f
-
-    def setScore(self, s):
-        self.score = s
-
-
 def __main__():
     agent = FQLearningAgent()
     for _ in range(10):
