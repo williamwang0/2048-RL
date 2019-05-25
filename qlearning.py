@@ -37,6 +37,7 @@ class FQLearningAgent:
         state_actions['Gameover'] = lambda: not_game('Gameover')
 
         def game():
+
             best_action = max([action for action in actions if game_field.move_is_possible(action)]
                               , key=(lambda action: self.getQValue(game_field, action)))
             # add epsilon exploration later here #
