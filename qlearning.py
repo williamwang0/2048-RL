@@ -6,7 +6,23 @@ class FQLearningAgent:
         self.weights = np.array([0, 0, 0, 0])
 
     def getFeature(self, s, a):
-        """ returns feature value calculation of a q-state """
+        """ returns feature value calculation of a q-state
+        1. Merges
+        2. Open Tiles
+        3. Adjacent Pairs that differ by a factor of 2
+        4. Biggest num in corner (0 or 1) """
+        prev_board = s.field
+        new_board = s.sim_move(s)[0]
+        max_num = 0
+
+        #Merges, Open Tiles, Biggest Num in Corner
+
+
+
+        #Adjacent Pairs differ by a Factor of 2
+
+
+
         return
 
     def getQValue(self, s, a):
