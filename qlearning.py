@@ -45,11 +45,12 @@ class QLearningAgent:
           Explore with prob self.epsilon.
         """
         # Pick Action
-        legalActions = # LEGAL ACTIONS $
+        legalActions = [a for a in actions if state.sim_move(a)[0] != state]
         p = self.epsilon
         if not legalActions:
             return None
         greedy_flag = # ASSIGN BERNOULLI COIN FLIP HERE #
+        # my name is albert and im really smart cause i know what a bernoulli coin flip is
         if greedy_flag:
             return random.choice(legalActions)
         else:
@@ -147,6 +148,7 @@ class FQLearningAgent:
         return counter
 
     def rowIncr(self, ratios):
+        """ returns whether ratios is monotonically increasing """
         if not ratios:
             return False
         if ratios[0] < 1:
@@ -161,6 +163,7 @@ class FQLearningAgent:
             return True
 
     def rowRatios(self, board, rowNum):
+        """ returns a list of the ratios between each number on 'board' in row 'rowNum' """
         row = board[rowNum]
         result = []
         for i in range(len(row) - 1):
