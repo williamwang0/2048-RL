@@ -1,9 +1,76 @@
 import numpy as np
 from collections import defaultdict
 from game import *
+import random
 
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
+
+
+class QLearningAgent:
+    def __init__(self):
+        self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix
+        self.epsilon = ?
+        self.alpha = ?
+
+    def learn(self):
+        ## TODO ##
+
+    def getQValue(self, state, action):
+        """ Returns Q(state,action); Should return 0.0 if we have never seen a state """
+        if (state, action) not in self.Q:
+            return 0.0
+        return self.Q[(state, action)]
+
+    def computeValueFromQValues(self, state):
+        """
+          Returns max_action Q(state,action)
+          where the max is over legal actions.  Note that if
+          there are no legal actions, which is the case at the
+          terminal state, you should return a value of 0.0.
+        """
+        actions = self.getLegalActions(state)
+        if not actions:
+            return 0
+        return max([self.getQValue(state, a) for a in actions])
+
+    def computeActionFromQValues(self, state):
+        """
+          Compute the best action to take in a state.  Note that if there
+          are no legal actions, which is the case at the terminal state,
+          you should return None.
+        """
+        "*** YOUR CODE HERE ***"
+        actions = self.getLegalActions(state)
+        if not actions:
+            return None
+        best_q_value = self.computeValueFromQValues(state)
+        best_actions = [a for a in actions if self.getQValue(state, a) == best_q_value]
+        return random.choice(best_actions)
+
+    def getAction(self, state):
+        """
+          Compute the action to take in the current state.  With
+          probability self.epsilon, we take a random action (epsilon-exploration) and
+          take the best policy action otherwise.
+        """
+        # Pick Action
+        legalActions = # LEGAL ACTIONS $
+        p = self.epsilon
+        if not legalActions:
+            return None
+        greedy_flag = # ASSIGN BERNOULLI COIN FLIP HERE #
+        if greedy_flag:
+            return random.choice(legalActions)
+        else:
+            return self.computeActionFromQValues(state)
+
+    def update(self, state, action, nextState, reward):
+        """ this is the q-value update method; double check it """
+        alpha = self.alpha
+        sample = reward + self.discount * self.computeValueFromQValues(nextState)
+        self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
+
 
 
 class FQLearningAgent:
