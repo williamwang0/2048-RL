@@ -1,5 +1,4 @@
 import numpy as np
-from collections import defaultdict
 from game import *
 import random
 
@@ -12,6 +11,7 @@ class QLearningAgent:
         self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
         self.epsilon = 1
         self.alpha = 1
+        self.game_field = GameField(win=(2 ** 15))
         "maybe more instance variables? idk"
 
     def learn(self):
@@ -41,21 +41,8 @@ class QLearningAgent:
         state_actions['Gameover'] = lambda: not_game('Gameover')
 
         def game():
-            def exFunc(action):
-                fv = self.getFeature(game_field, action)
-                count = 1
-                for i in range(num_feats):
-                    if fv[i] in self.counts[i]:
-                        count += 1
-                return self.getQValue(game_field, action) + self.explore / count
 
-            def regFunc(action):
-                return self.getQValue(game_field, action)
-
-            best_action = max([action for action in actions if game_field.move_is_possible(action)]
-                              , key=exFunc)
-            # add epsilon exploration later here #
-            # new_field, reward = game_field.sim_move(best_action, True)
+            best_action = self.getAction(game_field)
 
             prev_score = game_field.score
             prev_game_field = deepcopy(game_field)
@@ -124,6 +111,7 @@ class QLearningAgent:
         alpha = self.alpha
         sample = reward + self.discount * self.computeValueFromQValues(nextState)
         self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
+        # update self.alpha?? (slowly decrease it)
 
 
 def __main__():

@@ -5,6 +5,7 @@ from game import *
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
 
+
 class FQLearningAgent:
 
     def __init__(self):
