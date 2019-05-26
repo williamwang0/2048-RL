@@ -9,9 +9,10 @@ num_feats = 8
 
 class QLearningAgent:
     def __init__(self):
-        self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix
+        self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
         self.epsilon = ?
         self.alpha = ?
+        "maybe more instance variables? idk"
 
     def learn(self):
         ## TODO ##
@@ -23,24 +24,14 @@ class QLearningAgent:
         return self.Q[(state, action)]
 
     def computeValueFromQValues(self, state):
-        """
-          Returns max_action Q(state,action)
-          where the max is over legal actions.  Note that if
-          there are no legal actions, which is the case at the
-          terminal state, you should return a value of 0.0.
-        """
+        """ this is the V(s) value, found from Q(s, a) values """
         actions = self.getLegalActions(state)
         if not actions:
             return 0
         return max([self.getQValue(state, a) for a in actions])
 
     def computeActionFromQValues(self, state):
-        """
-          Compute the best action to take in a state.  Note that if there
-          are no legal actions, which is the case at the terminal state,
-          you should return None.
-        """
-        "*** YOUR CODE HERE ***"
+        """ finding the optimal action given current Q(s, a) values """
         actions = self.getLegalActions(state)
         if not actions:
             return None
@@ -50,9 +41,8 @@ class QLearningAgent:
 
     def getAction(self, state):
         """
-          Compute the action to take in the current state.  With
-          probability self.epsilon, we take a random action (epsilon-exploration) and
-          take the best policy action otherwise.
+          Compute the action to take in the current state.
+          Explore with prob self.epsilon.
         """
         # Pick Action
         legalActions = # LEGAL ACTIONS $
