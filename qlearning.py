@@ -10,12 +10,13 @@ num_feats = 8
 class QLearningAgent:
     def __init__(self):
         self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
-        self.epsilon = ?
-        self.alpha = ?
+        self.epsilon = 1
+        self.alpha = 1
         "maybe more instance variables? idk"
 
     def learn(self):
-        ## TODO ##
+        #TODO
+        return
 
     def getQValue(self, state, action):
         """ Returns Q(state,action); Should return 0.0 if we have never seen a state """
@@ -49,7 +50,7 @@ class QLearningAgent:
         p = self.epsilon
         if not legalActions:
             return None
-        greedy_flag = # ASSIGN BERNOULLI COIN FLIP HERE #
+        greedy_flag = 0 # ASSIGN BERNOULLI COIN FLIP HERE #
         # my name is albert and im really smart cause i know what a bernoulli coin flip is
         if greedy_flag:
             return random.choice(legalActions)
