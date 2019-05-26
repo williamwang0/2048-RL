@@ -15,8 +15,63 @@ class QLearningAgent:
         "maybe more instance variables? idk"
 
     def learn(self):
-        #TODO
-        return
+        """ trains agent on 1 game instance """
+        self.game_field = GameField(win=(2 ** 15))
+        game_field = self.game_field
+        state_actions = {}  # Init, Game, Win, Gameover, Exit
+
+        def init():
+            game_field.reset()
+            return 'Game'
+
+        state_actions['Init'] = init
+
+        def not_game(state):
+            # game_field.draw(stdscr)
+            # action = get_user_action(stdscr)
+            action = 'Exit'
+            responses = defaultdict(lambda: state)
+            responses['Restart'], responses['Exit'] = 'Init', 'Exit'
+            return responses[action]
+
+        state_actions['Win'] = lambda: not_game('Win')
+        state_actions['Gameover'] = lambda: not_game('Gameover')
+
+        def game():
+            def exFunc(action):
+                fv = self.getFeature(game_field, action)
+                count = 1
+                for i in range(num_feats):
+                    if fv[i] in self.counts[i]:
+                        count += 1
+                return self.getQValue(game_field, action) + self.explore / count
+
+            def regFunc(action):
+                return self.getQValue(game_field, action)
+
+            best_action = max([action for action in actions if game_field.move_is_possible(action)]
+                              , key=exFunc)
+            # add epsilon exploration later here #
+            # new_field, reward = game_field.sim_move(best_action, True)
+
+            prev_score = game_field.score
+            prev_game_field = deepcopy(game_field)
+
+            if game_field.move(best_action):
+                if game_field.is_win():
+                    return 'Win'
+                if game_field.is_gameover():
+                    return 'Gameover'
+                reward = (game_field.score - prev_score)
+                self.update(prev_game_field, best_action, game_field, reward)
+
+            return 'Game'
+
+        state_actions['Game'] = game
+
+        state = 'Init'
+        while state != 'Exit':
+            state = state_actions[state]()
 
     def getQValue(self, state, action):
         """ Returns Q(state,action); Should return 0.0 if we have never seen a state """
@@ -40,13 +95,17 @@ class QLearningAgent:
         best_actions = [a for a in actions if self.getQValue(state, a) == best_q_value]
         return random.choice(best_actions)
 
+    def getLegalActions(self, state):
+        """ returns a list of legal actions for the current state """
+        return [a for a in actions if state.sim_move(a)[0] != state]
+
     def getAction(self, state):
         """
           Compute the action to take in the current state.
           Explore with prob self.epsilon.
         """
         # Pick Action
-        legalActions = [a for a in actions if state.sim_move(a)[0] != state]
+        legalActions = self.getLegalActions(state)
         p = self.epsilon
         if not legalActions:
             return None
