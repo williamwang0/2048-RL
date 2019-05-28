@@ -54,7 +54,7 @@ class QLearningAgent:
                 if game_field.is_gameover():
                     return 'Gameover'
                 reward = (game_field.score - prev_score)
-                self.update(prev_game_field, best_action, game_field, reward)
+                self.update(prev_game_field.field, best_action, game_field.field, reward)
 
             return 'Game'
 
@@ -88,7 +88,7 @@ class QLearningAgent:
 
     def getLegalActions(self, state):
         """ returns a list of legal actions for the current state """
-        return [a for a in actions if state.sim_move(a)[0] != state]
+        return [a for a in actions if state.sim_move(a)[0] != state.field]
 
     def getAction(self, state):
         """
@@ -109,7 +109,7 @@ class QLearningAgent:
     def update(self, state, action, nextState, reward):
         """ this is the q-value update method; double check it """
         alpha = self.alpha
-        sample = reward + self.gamma * self.computeValueFromQValues(nextState)
+        sample = reward + self.discount * self.computeValueFromQValues(nextState)
         self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
         # update self.alpha?? (slowly decrease it)
 
@@ -118,12 +118,13 @@ def __main__():
     agent = QLearningAgent()
     for i in range(100):
         mean_max_tile = 0
-        for _ in range(20):
+        for _ in range(100):
             agent.learn()
             mT = agent.game_field.maxTile()
             #print(mT, agent.weights)
             mean_max_tile += mT
         print(mean_max_tile / 20)
+        print(len(agent.Q))
 
 
     # print(agent.weights)
