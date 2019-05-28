@@ -1,10 +1,14 @@
 import numpy as np
 from game import *
 import random
+from utils import Counter
 
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
 
+def tup(matrix):
+    result = [tuple(l) for l in matrix]
+    return tuple(result)
 
 class QLearningAgent:
     def __init__(self):
@@ -66,9 +70,9 @@ class QLearningAgent:
 
     def getQValue(self, state, action):
         """ Returns Q(state,action); Should return 0.0 if we have never seen a state """
-        if (state.field, action) not in self.Q:
+        if (tup(state.field), action) not in self.Q:
             return 0.0
-        return self.Q[(state.field, action)]
+        return self.Q[(tup(state.field), action)]
 
     def computeValueFromQValues(self, state):
         """ this is the V(s) value, found from Q(s, a) values """
@@ -110,7 +114,7 @@ class QLearningAgent:
         """ this is the q-value update method; double check it """
         alpha = self.alpha
         sample = reward + self.discount * self.computeValueFromQValues(nextState)
-        self.Q[(state.field, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
+        self.Q[(tup(state.field), action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
         # update self.alpha?? (slowly decrease it)
 
 
@@ -118,7 +122,7 @@ def __main__():
     agent = QLearningAgent()
     for i in range(100):
         mean_max_tile = 0
-        for _ in range(100):
+        for _ in range(20):
             agent.learn()
             mT = agent.game_field.maxTile()
             #print(mT, agent.weights)
