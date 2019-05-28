@@ -109,7 +109,7 @@ class QLearningAgent:
     def update(self, state, action, nextState, reward):
         """ this is the q-value update method; double check it """
         alpha = self.alpha
-        sample = reward + self.discount * self.computeValueFromQValues(nextState)
+        sample = reward + self.gamma * self.computeValueFromQValues(nextState)
         self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
         # update self.alpha?? (slowly decrease it)
 
