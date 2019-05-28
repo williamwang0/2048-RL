@@ -6,17 +6,19 @@ from utils import Counter
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
 
+
 def tup(matrix):
     result = [tuple(l) for l in matrix]
     return tuple(result)
 
+
 class QLearningAgent:
     def __init__(self):
-        self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
+        self.Q = {}  # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
         self.epsilon = 0.1
-        self.alpha = 0.005
+        self.alpha = 0.1
         self.game_field = GameField(win=(2 ** 15))
-        self.discount = 0.85
+        self.discount = 0.95
         "maybe more instance variables? idk"
 
     def learn(self):
@@ -129,6 +131,7 @@ def __main__():
             mean_max_tile += mT
         print(mean_max_tile / 20)
         print(len(agent.Q))
+        # print(agent.Q)
 
 
     # print(agent.weights)
