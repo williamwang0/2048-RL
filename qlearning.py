@@ -54,7 +54,7 @@ class QLearningAgent:
                 if game_field.is_gameover():
                     return 'Gameover'
                 reward = (game_field.score - prev_score)
-                self.update(prev_game_field.field, best_action, game_field.field, reward)
+                self.update(prev_game_field, best_action, game_field, reward)
 
             return 'Game'
 
@@ -66,9 +66,9 @@ class QLearningAgent:
 
     def getQValue(self, state, action):
         """ Returns Q(state,action); Should return 0.0 if we have never seen a state """
-        if (state, action) not in self.Q:
+        if (state.field, action) not in self.Q:
             return 0.0
-        return self.Q[(state, action)]
+        return self.Q[(state.field, action)]
 
     def computeValueFromQValues(self, state):
         """ this is the V(s) value, found from Q(s, a) values """
@@ -110,7 +110,7 @@ class QLearningAgent:
         """ this is the q-value update method; double check it """
         alpha = self.alpha
         sample = reward + self.discount * self.computeValueFromQValues(nextState)
-        self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
+        self.Q[(state.field, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
         # update self.alpha?? (slowly decrease it)
 
 
