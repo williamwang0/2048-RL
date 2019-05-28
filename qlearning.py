@@ -9,6 +9,7 @@ num_feats = 8
 class QLearningAgent:
     def __init__(self):
         self.Q = {} # not sure if built-in dict can hash (s, a) pair, may need to fix/use modified dict
+        self.gamma = 0.9
         self.epsilon = 1
         self.alpha = 1
         self.game_field = GameField(win=(2 ** 15))
@@ -109,7 +110,7 @@ class QLearningAgent:
     def update(self, state, action, nextState, reward):
         """ this is the q-value update method; double check it """
         alpha = self.alpha
-        sample = reward + self.discount * self.computeValueFromQValues(nextState)
+        sample = reward + self.gamma * self.computeValueFromQValues(nextState)
         self.Q[(state, action)] = (1 - alpha) * self.getQValue(state, action) + alpha * sample
         # update self.alpha?? (slowly decrease it)
 
