@@ -236,7 +236,7 @@ class FQLearningAgent:
 
 def __main__():
     agent = FQLearningAgent()
-    for i in range(100):
+    while True:
         mean_max_tile = 0
         for _ in range(20):
             agent.learn()
