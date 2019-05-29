@@ -245,7 +245,6 @@ def __main__():
             mean_max_tile += mT
         print(mean_max_tile / 20)
 
-
     # print(agent.weights)
 
 __main__()
