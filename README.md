@@ -32,8 +32,7 @@ For Approximate Q-Learning: `python3 approxqlearning.py`
   * Average Max Tile: 137.8
   * Reached 2048: 0
 * 1 day of training
-  * Average Max Tile:
-  * Reached 2048: 
+  **Couldn't compute due to lack of storage and computing power** 
 
 #### Approximate Q-Learning
 * 1 minute of training
