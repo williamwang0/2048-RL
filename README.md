@@ -15,6 +15,8 @@ the agent encounters. These Q-values are computed on demand, significantly reduc
 * numpy
 
 ### Training
+*Trains until manually interrupted*
+
 For Q-Learning: `python3 qlearning.py`
 
 For Approximate Q-Learning: `python3 approxqlearning.py`
