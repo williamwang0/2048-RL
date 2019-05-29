@@ -23,14 +23,26 @@ For Approximate Q-Learning: `python3 approxqlearning.py`
 *Recorded the mean max-tile achieved for every 20 games played*
 
 #### Q-Learning
-* 1 minute of training: ~115
-* 1 hour of training: ~130
-* 1 day of training: 
+* 1 minute of training
+  * Average Max Tile: 115.2
+  * Reached 2048: 0
+* 1 hour of training
+  * Average Max Tile: 137.8
+  * Reached 2048: 0
+* 1 day of training
+  * Average Max Tile:
+  * Reached 2048: 
 
 #### Approximate Q-Learning
-* 1 minute of training: ~530
-* 1 hour of training: ~600
-* 1 day of training: 
+* 1 minute of training
+  * Average Max Tile: 537.0
+  * Reached 2048: 0
+* 1 hour of training 
+  * Average Max Tile: 696.8
+  * Reached 2048: 1
+* 1 day of training
+  * Average Max Tile:
+  * Reached 2048: 
 
 ## Acknowledgments
 * Albert Zhang (@albertczhang)
