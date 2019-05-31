@@ -1,6 +1,8 @@
 import numpy as np
 from collections import defaultdict
 from game import *
+import time
+import curses
 
 actions = ['Up', 'Left', 'Down', 'Right']
 num_feats = 8
@@ -17,7 +19,7 @@ class FQLearningAgent:
         self.game_field = GameField(win=(2 ** 15))
         self.counts = [{} for _ in range(num_feats)]
 
-    def learn(self):
+    def learn(self, stdscr):
         """ trains agent on 1 game instance """
         self.game_field = GameField(win=(2 ** 15))
         game_field = self.game_field
@@ -30,7 +32,7 @@ class FQLearningAgent:
         state_actions['Init'] = init
 
         def not_game(state):
-            # game_field.draw(stdscr)
+            game_field.draw(stdscr)
             # action = get_user_action(stdscr)
             action = 'Exit'
             responses = defaultdict(lambda: state)
@@ -41,6 +43,7 @@ class FQLearningAgent:
         state_actions['Gameover'] = lambda: not_game('Gameover')
 
         def game():
+            game_field.draw(stdscr)
             def exFunc(action):
                 fv = self.getFeature(game_field, action)
                 count = 1
@@ -74,6 +77,7 @@ class FQLearningAgent:
 
         state = 'Init'
         while state != 'Exit':
+            time.sleep(1)
             state = state_actions[state]()
 
     def numAdj(self, board, ratio):
@@ -234,17 +238,21 @@ class FQLearningAgent:
         self.weights = self.weights + (self.alpha * diff * self.getFeature(s1, a))
 
 
-def __main__():
+def __main__(stdscr):
+    curses.use_default_colors()
     agent = FQLearningAgent()
     while True:
         mean_max_tile = 0
         for _ in range(20):
-            agent.learn()
+            agent.learn(stdscr)
+            print('done')
             mT = agent.game_field.maxTile()
-            print(mT, agent.weights)
+            #print(mT, agent.weights)
             mean_max_tile += mT
         print(mean_max_tile / 20)
 
+
     # print(agent.weights)
 
-__main__()
+#__main__()
+curses.wrapper(__main__)
