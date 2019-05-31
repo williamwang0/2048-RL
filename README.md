@@ -15,6 +15,8 @@ the agent encounters. These Q-values are computed on demand, significantly reduc
 * numpy
 
 ### Training
+*Trains until manually interrupted*
+
 For Q-Learning: `python3 qlearning.py`
 
 For Approximate Q-Learning: `python3 approxqlearning.py`
@@ -30,19 +32,18 @@ For Approximate Q-Learning: `python3 approxqlearning.py`
   * Average Max Tile: 137.8
   * Reached 2048: 0
 * 1 day of training
-  * Average Max Tile:
-  * Reached 2048: 
+  * Insufficient storage and computing power
 
 #### Approximate Q-Learning
 * 1 minute of training
   * Average Max Tile: 537.0
   * Reached 2048: 0
 * 1 hour of training 
-  * Average Max Tile: 696.8
-  * Reached 2048: 1
+  * Average Max Tile: 602.8
+  * Reached 2048: 0
 * 1 day of training
-  * Average Max Tile:
-  * Reached 2048: 
+  * Average Max Tile: 697.3
+  * Reached 2048: 1
 
 ## Acknowledgments
 * Albert Zhang (@albertczhang)
