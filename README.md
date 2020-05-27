@@ -46,7 +46,7 @@ For Approximate Q-Learning: `python3 approxqlearning.py`
   * Reached 2048: 1
 
 ## Team
-| **Albert Zhang**</a> | **Colton Nishida**</a> |
-| :---: |:---:|
-| [![Albert Zhang](https://avatars0.githubusercontent.com/u/31051641?v=4&s=200)](https://github.com/albertczhang)    | [![Colton Nishida](https://avatars2.githubusercontent.com/u/46944125?v=4&s=200)](https://github.com/coltonnishida) |
-| <a href="https://github.com/albertczhang" target="_blank">`github.com/albertczhang`</a> | <a href="https://github.com/coltonnishida" target="_blank">`github.com/coltonnishida`</a> |
+| **William Wang**</a> | **Albert Zhang**</a> | **Colton Nishida**</a> |
+| :---: | :---: | :---: |
+| [![William Wang](https://avatars1.githubusercontent.com/u/46856940?v=4&s=200)](https://github.com/albertczhang)  | [![Albert Zhang](https://avatars0.githubusercontent.com/u/31051641?v=4&s=200)](https://github.com/albertczhang) | [![Colton Nishida](https://avatars2.githubusercontent.com/u/46944125?v=4&s=200)](https://github.com/coltonnishida) |
+| <a href="https://github.com/albertczhang" target="_blank">`github.com/albertczhang`</a> | <a href="https://github.com/albertczhang" target="_blank">`github.com/albertczhang`</a> | <a href="https://github.com/coltonnishida" target="_blank">`github.com/coltonnishida`</a> |
